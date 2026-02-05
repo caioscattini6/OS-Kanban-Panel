@@ -1,0 +1,213 @@
+{
+  "name": "Pinnacle Section 1 - Atendimento Inicial",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          {
+            "field": "text",
+            "value": "Início do fluxo WhatsApp - Receber mensagem inicial"
+          }
+        ]
+      },
+      "id": "1",
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookDescription": "Ponto de entrada via WhatsApp API"
+    },
+    {
+      "parameters": {
+        "operation": "find",
+        "collection": "clientes",
+        "query": "={{ { \"telefone\": $json[\"from\"] } }}"
+      },
+      "id": "2",
+      "name": "Checar Cliente DB",
+      "type": "n8n-nodes-base.mongodb",
+      "typeVersion": 1,
+      "position": [500, 300],
+      "notes": "Verifica se o cliente já existe no banco de dados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [],
+          "string": [
+            {
+              "value1": "={{ $json[\"data\"] ? \"sim\" : \"nao\" }}",
+              "operation": "equal",
+              "value2": "sim"
+            }
+          ]
+        }
+      },
+      "id": "3",
+      "name": "Cliente Existe?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { mensagem: \"Olá, já temos seus dados. Deseja confirmar ou atualizar?\" }}];"
+      },
+      "id": "4",
+      "name": "Mensagem Confirmar Dados",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1000, 180]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { mensagem: \"Olá, precisamos dos seus dados:\n1. Nome completo\n2. CPF\n3. Endereço completo com CEP\" }}];"
+      },
+      "id": "5",
+      "name": "Mensagem Solicitar Dados",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1000, 420]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { mensagem: \"Selecione uma opção:\n1 - Suporte humano\n2 - Enviar equipamento para reparo\n3 - Consultar status de equipamento\n4 - Outro assunto\" }}];"
+      },
+      "id": "6",
+      "name": "Menu de Opções",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const id = \"PB\" + String(Date.now()).slice(-6);\nreturn [{ json: { protocolo: id, mensagem: \"Seu ticket foi aberto com sucesso. Número: \" + id }}];"
+      },
+      "id": "7",
+      "name": "Gerar Protocolo",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1500, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "atendimento@gpinnacle.com",
+        "toEmail": "={{$json[\"emailCliente\"]}}",
+        "subject": "Solicitação de Serviço Aberta",
+        "text": "Prezado cliente,\n\nRecebemos sua solicitação. Seguem os próximos passos:\n1. Recebimento do equipamento\n2. Geração da OS\n3. Análise técnica e orçamento\n4. Aprovação\n5. Conserto\n6. Pagamento\n7. Retorno do equipamento\n\nObrigado por escolher a Pinnacle Broadcast.\n\nAtenciosamente,\nEquipe Pinnacle"
+      },
+      "id": "8",
+      "name": "Email Cliente Confirmação",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1750, 180]
+    },
+    {
+      "parameters": {
+        "fromEmail": "atendimento@gpinnacle.com",
+        "toEmail": "suporte@pinnacle.com",
+        "subject": "Novo Ticket Aberto",
+        "text": "Um novo ticket foi aberto. Confira os detalhes no banco de dados."
+      },
+      "id": "9",
+      "name": "Email Suporte Interno",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [1750, 420]
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Checar Cliente DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checar Cliente DB": {
+      "main": [
+        [
+          {
+            "node": "Cliente Existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Existe?": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Confirmar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensagem Solicitar Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Confirmar Dados": {
+      "main": [
+        [
+          {
+            "node": "Menu de Opções",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Solicitar Dados": {
+      "main": [
+        [
+          {
+            "node": "Menu de Opções",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Menu de Opções": {
+      "main": [
+        [
+          {
+            "node": "Gerar Protocolo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gerar Protocolo": {
+      "main": [
+        [
+          {
+            "node": "Email Cliente Confirmação",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Suporte Interno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "id": "workflow-pinnacle-section1"
+}

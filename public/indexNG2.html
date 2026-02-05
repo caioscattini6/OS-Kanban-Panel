@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de OS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .resizer {
+      width: 6px;
+      background: #444;
+      cursor: col-resize;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Painel de OS - Pinnacle</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="downloadBackup()">Backup</button>
+      <button onclick="resetPanel()">Resetar</button>
+    </div>
+  </header>
+
+  <form class="form" onsubmit="addOS(event)">
+    <input type="number" id="numero" placeholder="Número da OS (4 dígitos)" required min="1000" max="9999" />
+    <select id="status">
+      <option value="entrada">Entrada</option>
+      <option value="enviar">Enviar orçamento</option>
+      <option value="aguardando">Ag. Aprovação</option>
+      <option value="aprovado">Aprovado!</option>
+      <option value="andamento">Em andamento</option>
+      <option value="agpeca">Ag. Peça</option>
+      <option value="rma">RMA</option>
+      <option value="pronto">Pronto</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Buscar OS..." style="width: 120px;" />
+    <button type="submit">Adicionar OS</button>
+    <button type="button" onclick="searchOS()">Buscar</button>
+    <button type="button" onclick="clearSearch()">Limpar</button>
+  </form>
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'entrada')">
+      <h2>Entrada</h2>
+      <div id="entradaCol" class="section-container"></div>
+    </div>
+    <div class="resizer"></div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'enviar')">
+      <h2>Enviar orçamento</h2>
+      <div id="enviarCol" class="section-container"></div>
+    </div>
+    <div class="resizer"></div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aguardando')">
+      <h2>Ag. Aprovação</h2>
+      <div id="aguardandoCol" class="section-container"></div>
+    </div>
+    <div class="resizer"></div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aprovado')">
+      <h2>Aprovado!</h2>
+      <div id="aprovadoCol" class="section-container"></div>
+    </div>
+    <div class="resizer"></div>
+
+    <div class="column">
+      <h2>Em andamento / Ag. Peça / RMA</h2>
+
+      <div class="section-subtitle">Em andamento</div>
+      <div id="andamentoCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'andamento')"></div>
+
+      <div class="section-subtitle">Ag. Peça</div>
+      <div id="agpecaCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'agpeca')"></div>
+
+      <div class="section-subtitle">RMA</div>
+      <div id="rmaCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'rma')"></div>
+    </div>
+    <div class="resizer"></div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'pronto')">
+      <h2>Pronto</h2>
+      <div id="prontoCol" class="section-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Redimensionamento de colunas
+    document.querySelectorAll('.resizer').forEach(resizer => {
+      const prev = resizer.previousElementSibling;
+      const next = resizer.nextElementSibling;
+      let startX, prevW, nextW;
+
+      resizer.addEventListener('mousedown', e => {
+        e.preventDefault();
+        startX = e.clientX;
+        prevW = prev.offsetWidth;
+        nextW = next.offsetWidth;
+
+        const move = e => {
+          const dx = e.clientX - startX;
+          prev.style.flex = 'none';
+          next.style.flex = 'none';
+          prev.style.width = `${prevW + dx}px`;
+          next.style.width = `${nextW - dx}px`;
+        };
+
+        const stop = () => {
+          document.removeEventListener('mousemove', move);
+          document.removeEventListener('mouseup', stop);
+        };
+
+        document.addEventListener('mousemove', move);
+        document.addEventListener('mouseup', stop);
+      });
+    });
+
+    // Suas funções JS originais (fetchOS, addOS, etc.) continuam aqui
+    // ...
+  </script>
+</body>
+</html>

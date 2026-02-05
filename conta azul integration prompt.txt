@@ -1,0 +1,36 @@
+Using the context above of the app created here, do the following:
+
+
+You are an expert Node.js developer specializing in browser automation. I need you to generate complete, working code for a local Node.js application that automates interactions with a web-based ERP system called Conta Azul. The setup is as follows:
+
+- The Node.js app serves a simple web panel (using Express.js and a basic HTML frontend) that displays a list of registers (e.g., OS numbers). This panel runs locally and is opened in one Chrome tab (e.g., via http://localhost:3000).
+
+- The ERP page is https://app.contaazul.com/#/ordens-de-servico, which will be handled in another Chrome tab or window.
+
+- When a user clicks on a box (representing an OS number) in the panel tab, the app should automatically:
+  1. Open or navigate to the ERP page (assuming it's not already open; if it is, the automation can open a new tab).
+  2. Handle login if necessary (prompt for credentials or use stored ones securely; do not hardcode them).
+  3. Fill the search input field with the selected OS number.
+  4. Click the search button to trigger the details display.
+
+- Use Puppeteer for browser automation, as it can control Chrome programmatically. Launch Chrome in non-headless mode so the user can see the actions (headless: false). Ensure the automation targets the ERP page correctly.
+
+- Specific HTML elements on the ERP page:
+  - Input field: <input type="text" name="search" id="workOrderTextualSearch" ng-model="textualSearch" ng-keypress="textSearchKeypress($event)" placeholder="Pesquisa" class="saleTextualSearch ng-valid ng-dirty ng-valid-parse ng-touched">
+    - Use the selector '#workOrderTextualSearch' to target it.
+  - Button: <span id="searchWorkOrder" ng-click="textSearch()" class="add-on iconed glyphicons search"><i></i></span>
+    - Use the selector '#searchWorkOrder' to target and click it.
+
+- The app does not involve a TV; everything happens in Chrome tabs on a standard computer.
+
+- Additional requirements:
+  - The panel should be a simple HTML page with clickable divs or buttons, each representing an OS number (hardcode a few examples like 12345, 67890 for testing).
+  - When clicked, send the OS number to the backend (via WebSocket, AJAX, or similar) to trigger Puppeteer automation.
+  - Handle login: Assume the login page is https://app.contaazul.com/login (confirm if needed). Use environment variables for email and password (e.g., via dotenv).
+  - Wait for page loads, elements to appear, and handle potential errors (e.g., timeouts, failed selectors).
+  - Keep the browser open after actions so the user can view details.
+  - Include npm dependencies (e.g., puppeteer, express) and installation instructions.
+  - Ensure security: No hardcoded credentials; advise on using .env.
+  - Make the code modular, commented, and easy to run (e.g., node app.js).
+
+Generate the full code, including package.json if needed, and explain how to run it. If Puppeteer isn't ideal, suggest alternatives like Playwright, but prefer Puppeteer. Do not violate any terms of service; note that this is for personal use.

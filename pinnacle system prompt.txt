@@ -1,0 +1,93 @@
+
+
+I want to create a automation system that handle customer tickets for a service center. It will run on n8n locally deployed on a server, integrating whatsapp messaging, e-mail notification, and customer data handling. 
+
+Build a structured prompt to serve AI for this project:
+
+
+
+
+STEP 1 - Contact trigger
+First the customer request by whatsapp (WAHA api) a support - the AI Agent (Ollama) will check in the database (Google sheets) if it has previous data from it - if yes, retrieve data quickly to the customer and asks for confirmation. If the customer wants to change something, update it. If not customer data in DB, prompt for customer data:
+- Full name
+- TAX ID (CPF)
+- Full Address with ZIP code
+
+the system add a timestamp to the DB for future use
+
+Then the system asks the customer for one of the following:
+
+1 - Get human support
+2 - Send equipment for repair
+3 - Get sent equipment status
+4 - Other subject for human interaction
+
+If customer select 1 - redirects for support whatsapp #1
+If customer select 2 - Open ticket request form
+If customer select 3 - connect to 'conta azul' API to get status
+If customer select 4 - redirects for support whatsapp #2
+
+Option 2 - Open ticket request form:
+file:///C:/meu-painel-os/index%20do%20sistema%20novo.html - path to be updated later - it contains:
+
+a. Customer data section
+- Customer's full name (autofilled from previous whatsapp interaction)
+- TAX ID (autofilled from previous whatsapp interaction)
+- Full address with zip code (autofilled from previous whatsapp interaction)
+- Contact number (get from whatsapp api)
+- user email address (must be valid)
+- Company's name
+- Company full address
+- Company's TAX ID
+- company email address (must be valid)
+
+b. Equipment data section
+- Equipment manufacturer
+- Equipment model
+- Equipment Serial number
+- Issue description
+- Issue photo upload (not mandatory)
+- Issue video upload (not mandatory)
+- Purchase of proof upload (document)
+
+c. way of sending (select one)
+- Correios - if this is selected asks for tracking#
+- Transportadora - if this is selected asks for Courier name and tracking#
+- Em mãos (hand to hand) -
+In every case reinforce Pinnacle Address contained in the header of the form
+
+
+All these inputs will be stored in the DB (Sheets)
+
+
+
+
+
+OUTPUT - After form submitting, the system will generate a sequencial unique number starting with PBXXXXXX and put in  the database;
+
+STEP 2 - Notifications
+The system will send 3 emails:
+
+Email 1. Subject (Service Request Opened) one back to the customer with the content of the form, packing recomendations, next steps during the service flow:
+- Equipment received in the service center
+- Generate OS number (conta azul)
+- Technical analisys and service quote generation
+- Customer approval
+- Technical service completion
+- Payment
+- Equipment return to the customer
+Thank the customer for the request 
+ 
+Email 2 and 3. (to the service center personal - to advice ticket inbound - with all the data and links to the photos, videos and documents stored in DB
+
+This is the SECTION 1 of the automation
+
+Further sections will be added
+
+I need a json automation file to be opened in n8n with its nodes for further configuration - it will be hosted locally
+
+
+
+
+
+

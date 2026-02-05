@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de OS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div style="background:#004d40;color:#fff;padding:10px;text-align:center;font-weight:bold;">
+    ✅ Atualizado
+  </div>
+
+  <header>
+    <h1>Painel de OS - Assistência Técnica Pinnacle</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="downloadBackup()">Backup</button>
+      <button onclick="resetPanel()">Resetar</button>
+    </div>
+  </header>
+
+  <form class="form" onsubmit="addOS(event)">
+    <input type="number" id="numero" placeholder="Número da OS (4 dígitos)" required min="1000" max="9999" />
+    <select id="status">
+      <option value="entrada">Entrada</option>
+      <option value="enviar">Enviar orçamento</option>
+      <option value="aguardando">Ag. Aprovação</option>
+      <option value="aprovado">Aprovado!</option>
+      <option value="andamento">Em andamento</option>
+      <option value="peca">Ag. Peça</option>
+      <option value="rma">RMA</option>
+      <option value="pronto">Pronto</option>
+    </select>
+    <button type="submit">Adicionar OS</button>
+    <input type="text" id="busca" placeholder="Buscar OS..." oninput="buscarOS()" />
+  </form>
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'entrada')">
+      <h2>Entrada</h2>
+      <div class="column-grid" id="entradaCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'enviar')">
+      <h2>Enviar orçamento</h2>
+      <div class="column-grid" id="enviarCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aguardando')">
+      <h2>Ag. Aprovação</h2>
+      <div class="column-grid" id="aguardandoCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aprovado')">
+      <h2>Aprovado!</h2>
+      <div class="column-grid" id="aprovadoCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, null)">
+      <h2>Em andamento / Ag. Peça / RMA</h2>
+      <div class="column-grid" id="andamentoCol"></div>
+      <div class="column-grid" id="pecaCol"></div>
+      <div class="column-grid" id="rmaCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'pronto')">
+      <h2>Pronto</h2>
+      <div class="column-grid" id="prontoCol"></div>
+    </div>
+  </div>
+
+  <script>
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
+    async function drop(e, newStatus) {
+      e.preventDefault();
+      const numero = e.dataTransfer.getData("text/plain");
+      if (!numero) return;
+
+      if (!newStatus) {
+        const status = prompt("Novo status (andamento, peca, rma):");
+        if (!["andamento", "peca", "rma"].includes(status)) return alert("Status inválido.");
+        newStatus = status;
+      }
+
+      await fetch(`/api/os/${numero}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      fetchOS();
+    }
+
+    async function fetchOS() {
+      const res = await fetch("/api/os");
+      const data = await res.json();
+
+      const cols = {
+        entrada: document.getElementById("entradaCol"),
+        enviar: document.getElementById("enviarCol"),
+        aguardando: document.getElementById("aguardandoCol"),
+        aprovado: document.getElementById("aprovadoCol"),
+        andamento: document.getElementById("andamentoCol"),
+        peca: document.getElementById("pecaCol"),
+        rma: document.getElementById("rmaCol"),
+        pronto: document.getElementById("prontoCol"),
+      };
+
+      Object.values(cols).forEach(col => col.innerHTML = "");
+
+      // ordenar por número
+      data.sort((a, b) => Number(a.numero) - Number(b.numero));
+
+      data.forEach(({ numero, status, urgente }) => {
+        const div = document.createElement("div");
+        div.className = `os ${status}`;
+        if (urgente) div.classList.add("urgente");
+        div.setAttribute("draggable", "true");
+        div.setAttribute("data-numero", numero);
+        div.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", numero);
+        });
+        div.innerHTML = `
+          <div class="btn-urgente" onclick="toggleUrgente('${numero}')"></div>
+          <button class="btn-excluir" onclick="deleteOS('${numero}')">&times;</button>
+          ${numero}
+        `;
+        if (cols[status]) cols[status].appendChild(div);
+      });
+
+      buscarOS(); // manter destaque se busca estiver ativa
+    }
+
+    async function addOS(e) {
+      e.preventDefault();
+      const numero = document.getElementById("numero").value;
+      const status = document.getElementById("status").value;
+
+      const res = await fetch("/api/os", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numero, status }),
+      });
+
+      if (res.ok) {
+        fetchOS();
+        e.target.reset();
+      } else {
+        const err = await res.json();
+        alert("Erro: " + (err.error || "Erro ao adicionar OS."));
+      }
+    }
+
+    async function toggleUrgente(numero) {
+      await fetch(`/api/os/urgente/${numero}`, { method: "PUT" });
+      fetchOS();
+    }
+
+    async function deleteOS(numero) {
+      if (confirm("Excluir OS " + numero + "?")) {
+        await fetch(`/api/os/${numero}`, { method: "DELETE" });
+        fetchOS();
+      }
+    }
+
+    async function saveNow() {
+      await fetch("/api/save");
+      alert("Backup salvo.");
+    }
+
+    function downloadBackup() {
+      window.location.href = "/backup.json";
+    }
+
+    async function resetPanel() {
+      if (confirm("Deseja apagar todas as OSs?")) {
+        await fetch("/api/reset", { method: "POST" });
+        fetchOS();
+      }
+    }
+
+    function buscarOS() {
+      const termo = document.getElementById("busca").value.trim();
+      document.querySelectorAll(".os").forEach(el => {
+        el.classList.remove("destaque");
+        if (termo && el.textContent.includes(termo)) {
+          el.classList.add("destaque");
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    }
+
+    fetchOS();
+    setInterval(fetchOS, 5000);
+  </script>
+</body>
+</html>

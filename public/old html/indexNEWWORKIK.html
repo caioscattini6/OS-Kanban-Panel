@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de OS</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      padding: 20px;
+    }
+
+    header, .form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .form input, .form select, .form button {
+      padding: 6px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .form input, .form select {
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+
+    .form button {
+      background-color: #00c853;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .columns {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      justify-content: center;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .column {
+      flex: 1;
+      min-width: 120px;
+      background: #1e1e1e;
+      border-radius: 6px;
+      padding: 6px;
+    }
+
+    .column h2 {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .column-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .os {
+      position: relative;
+      padding: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 4px;
+      min-height: 32px;
+    }
+
+    .enviar { background: black; color: white; }
+    .aguardando { background: goldenrod; color: black; }
+    .aprovado { background: #1e40af; color: white; }
+    .andamento { background: darkorange; color: white; }
+    .pronto { background: darkgreen; color: white; }
+    .entrada { background: gray; color: white; }
+
+    /* New statuses merged under andamento */
+    .agordem { background: purple; color: white; }
+    .rma { background: teal; color: white; }
+
+    .urgente {
+      animation: pulsar 1s infinite;
+    }
+
+    @keyframes pulsar {
+      0%, 100% { filter: brightness(100%); }
+      50% { filter: brightness(130%); }
+    }
+
+    .btn-urgente {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+      background-color: #bbb;
+      border: 1px solid #999;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .urgente .btn-urgente {
+      background-color: red;
+    }
+
+    .btn-excluir {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      color: white;
+      font-size: 10px;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* Search highlight */
+    .search-highlight {
+      outline: 3px solid #ffeb3b;
+      animation: highlight-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes highlight-pulse {
+      0%, 100% { box-shadow: 0 0 8px 4px #ffeb3b; }
+      50% { box-shadow: 0 0 16px 8px #ffee58; }
+    }
+
+  @media (max-width: 768px) {
+    .columns {
+      flex-direction: column !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+    .column {
+      flex: unset;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    body {
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    .form, header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .form input, .form select, .form button,
+    header button {
+      width: 100%;
+      margin-bottom: 6px;
+    }
+
+    .columns {
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    .column {
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+      min-width: 250px;
+    }
+
+    .column h2 {
+      font-size: 15px;
+    }
+
+    .column-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .os {
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .btn-excluir {
+      top: 6px;
+      right: 6px;
+      font-size: 14px;
+    }
+
+    .btn-urgente {
+      top: 6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+  </style>
+</head>
+<body>
+  <div style="background:#004d40;color:#fff;padding:10px;text-align:center;font-weight:bold;">
+    ✅ Atualizado
+  </div>
+  <header>
+    <h1>Painel de OS - Assistência Técnica Pinnacle</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="downloadBackup()">Backup</button>
+      <button onclick="resetPanel()">Resetar</button>
+    </div>
+  </header>
+
+  <form class="form" onsubmit="addOS(event)">
+    <input type="number" id="numero" placeholder="Número da OS (4 dígitos)" required min="1000" max="9999" />
+    <select id="status">
+      <option value="entrada">Entrada</option>
+      <option value="enviar">Enviar orçamento</option>
+      <option value="aguardando">Ag. Aprovação</option>
+      <option value="aprovado">Aprovado!</option>
+      <option value="andamento">Em andamento</option>
+      <option value="agordem">Ag. Ordem</option>
+      <option value="rma">RMA</option>
+      <option value="pronto">Pronto</option>
+    </select>
+    <button type="submit">Adicionar OS</button>
+  </form>
+
+  <form id="searchForm" onsubmit="searchOS(event)" style="margin:10px 0; display:flex; gap:6px; justify-content:center;">
+    <input type="text" id="searchInput" placeholder="Buscar OS..." style="padding:6px; font-size:14px; border-radius:5px; border:none; background:#1e1e1e; color:#fff; width:200px;" />
+    <button type="submit" style="padding:6px 12px; font-size:14px; border:none; border-radius:5px; background:#00c853; color:#fff; cursor:pointer;">Buscar</button>
+    <button type="button" onclick="clearSearch()" style="padding:6px 12px; font-size:14px; border:none; border-radius:5px; background:#f44336; color:#fff; cursor:pointer;">Limpar</button>
+  </form>
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'entrada')">
+      <h2>Entrada</h2>
+      <div class="column-grid" id="entradaCol"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'enviar')">
+      <h2>Enviar orçamento</h2>
+      <div class="column-grid" id="enviarCol"></div>
+    </div>
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aguardando')">
+      <h2>Ag. Aprovação</h2>
+      <div class="column-grid" id="aguardandoCol"></div>
+    </div>
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aprovado')">
+      <h2>Aprovado!</h2>
+      <div class="column-grid" id="aprovadoCol"></div>
+    </div>
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'andamento')">
+      <h2>Em andamento / Ag. Ordem / RMA</h2>
+      <div class="column-grid" id="andamentoCol"></div>
+    </div>
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'pronto')">
+      <h2>Pronto</h2>
+      <div class="column-grid" id="prontoCol"></div>
+    </div>
+  </div>
+
+  <script>
+    let searchTerm = "";
+
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
+    async function drop(e, newStatus) {
+      e.preventDefault();
+      const numero = e.dataTransfer.getData("text/plain");
+      if (!numero) return;
+      await fetch(`/api/os/${numero}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      fetchOS();
+    }
+
+    async function fetchOS() {
+      const res = await fetch("/api/os");
+      const data = await res.json();
+
+      const cols = {
+        entrada: document.getElementById("entradaCol"),
+        enviar: document.getElementById("enviarCol"),
+        aguardando: document.getElementById("aguardandoCol"),
+        aprovado: document.getElementById("aprovadoCol"),
+        andamento: document.getElementById("andamentoCol"), // merged col
+        pronto: document.getElementById("prontoCol"),
+      };
+
+      Object.values(cols).forEach((col) => (col.innerHTML = ""));
+
+      // Sort numeric ascending by numero
+      data.sort((a, b) => Number(a.numero) - Number(b.numero));
+
+      data.forEach(({ numero, status, urgente }) => {
+        const div = document.createElement("div");
+
+        let colKey = status;
+        if (["andamento", "agordem", "rma"].includes(status)) {
+          colKey = "andamento"; // merged column
+          div.className = `os ${status}`; // use exact status as class for colors
+        } else {
+          div.className = `os ${status}`;
+        }
+
+        if (urgente) div.classList.add("urgente");
+
+        div.setAttribute("draggable", "true");
+        div.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", numero);
+        });
+
+        div.innerHTML = `
+          <div class="btn-urgente" onclick="toggleUrgente('${numero}')"></div>
+          <button class="btn-excluir" onclick="deleteOS('${numero}')">&times;</button>
+          ${numero}
+        `;
+
+        cols[colKey].appendChild(div);
+      });
+
+      if (searchTerm) highlightSearch(searchTerm);
+    }
+
+    async function addOS(e) {
+      e.preventDefault();
+      const numero = document.getElementById("numero").value;
+      const status = document.getElementById("status").value;
+
+      const res = await fetch("/api/os", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numero, status }),
+      });
+
+      if (res.ok) {
+        fetchOS();
+        e.target.reset();
+      } else {
+        const err = await res.json();
+        alert("Erro: " + (err.error || "Erro ao adicionar OS."));
+      }
+    }
+
+    async function toggleUrgente(numero) {
+      await fetch(`/api/os/urgente/${numero}`, { method: "PUT" });
+      fetchOS();
+    }
+
+    async function deleteOS(numero) {
+      if (confirm("Excluir OS " + numero + "?")) {
+        await fetch(`/api/os/${numero}`, { method: "DELETE" });
+        fetchOS();
+      }
+    }
+
+    async function saveNow() {
+      await fetch("/api/save");
+      alert("Backup salvo.");
+    }
+
+    function downloadBackup() {
+      window.location.href = "/backup.json";
+    }
+
+    async function resetPanel() {
+      if (confirm("Deseja apagar todas as OSs?")) {
+        await fetch("/api/reset", { method: "POST" });
+        fetchOS();
+      }
+    }
+
+    function searchOS(e) {
+      e.preventDefault();
+      const input = document.getElementById("searchInput");
+      searchTerm = input.value.trim();
+      if (!searchTerm) {
+        clearSearch();
+        return;
+      }
+      fetchOS();
+    }
+
+    function clearSearch() {
+      searchTerm = "";
+      document.getElementById("searchInput").value = "";
+      fetchOS();
+    }
+
+    function highlightSearch(term) {
+      if (!term) return;
+
+      const osDivs = document.querySelectorAll(".os");
+      let firstFound = false;
+      osDivs.forEach(div => {
+        if (div.textContent.includes(term)) {
+          div.classList.add("search-highlight");
+          if (!firstFound) {
+            div.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstFound = true;
+          }
+        } else {
+          div.classList.remove("search-highlight");
+        }
+      });
+    }
+
+    fetchOS();
+    setInterval(fetchOS, 5000);
+  </script>
+</body>
+</html>

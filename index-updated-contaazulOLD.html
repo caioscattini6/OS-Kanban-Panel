@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de OS</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    header, .form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .form input, .form select, .form button {
+      padding: 6px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      background-color: #1e1e1e;
+      color: white;
+    }
+    .form button { background-color: #00c853; cursor: pointer; }
+    .columns {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 10px;
+      height: calc(100vh - 170px);
+    }
+    .column {
+      flex: 1 1 0;
+      background: #1e1e1e;
+      border-radius: 6px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .column h2 {
+      text-align: center;
+      font-size: 14px;
+      margin: 0 0 8px;
+      user-select: none;
+    }
+    .section-subtitle {
+      font-size: 12px;
+      text-align: center;
+      color: #bbb;
+      margin: 6px 0;
+    }
+    .section-container {
+      flex-grow: 1;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: #2b2b2b;
+      padding: 4px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      align-content: start;
+    }
+    .os {
+      font-size: 11px;
+      padding: 4px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 4px;
+      position: relative;
+      cursor: grab;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    /* Tooltip de observações */
+    .os[data-obs]:hover::after {
+      content: attr(data-obs);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      max-width: 240px;
+      white-space: pre-wrap;
+      z-index: 9999;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    /* Esconde tooltip durante drag */
+    .os.dragging::after { display: none !important; }
+
+    /* Cores por status */
+    .entrada { background: gray; color: white; }
+    .enviar { background: black; color: white; }
+    .aguardando { background: goldenrod; color: black; }
+    .aprovado { background: #1e40af; color: white; }
+    .andamento { background: darkorange; color: white; }
+    .agordem { background: purple; color: white; }
+    .rma { background: teal; color: white; }
+    .pronto { background: darkgreen; color: white; }
+    .semconserto { background: red;  color: white;}
+
+    .urgente { animation: piscar 1s infinite; }
+    @keyframes piscar {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.5); }
+    }
+
+    .btn-urgente {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #bbb;
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    .urgente .btn-urgente { background-color: red; }
+
+    .btn-excluir {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 10px;
+      border: none;
+      background: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-obs {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      font-size: 12px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+
+    /* botão ContaAzul (pequeno, bottom-left ao lado das observações) */
+    .btn-contaazul {
+      position: absolute;
+      bottom: 4px;
+      left: 36px; /* deixa espaço para o botão de observações em left:4px */
+      font-size: 11px;
+      background: #00aaff;
+      border: none;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+
+    .search-highlight {
+      outline: 3px solid yellow;
+      animation: brilho 1s infinite alternate;
+    }
+    @keyframes brilho {
+      from { outline-color: yellow; }
+      to { outline-color: orange; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="font-size:16px;">Painel de OS - Pinnacle</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="downloadBackup()">Backup</button>
+      <button onclick="resetPanel()">Resetar</button>
+    </div>
+  </header>
+
+  <form class="form" onsubmit="addOS(event)">
+    <input type="number" id="numero" placeholder="Número da OS (4 dígitos)" required min="1000" max="9999" />
+    <select id="status">
+      <option value="entrada">Entrada</option>
+      <option value="enviar">Enviar orçamento</option>
+      <option value="aguardando">Ag. Aprovação</option>
+      <option value="aprovado">Aprovado!</option>
+      <option value="andamento">Em andamento</option>
+      <option value="agordem">Ag. Peça</option>
+      <option value="rma">RMA</option>
+      <option value="pronto">Pronto</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Buscar OS..." style="width: 120px;" />
+    <button type="submit">Adicionar OS</button>
+    <button type="button" onclick="searchOS()">Buscar</button>
+    <button type="button" onclick="clearSearch()">Limpar</button>
+  </form>
+
+<form class="form" onsubmit="addOS(event)">
+  ...
+  <button type="submit">Adicionar OS</button>
+  <button type="button" onclick="searchOS()">Buscar</button>
+  <button type="button" onclick="clearSearch()">Limpar</button>
+</form>
+
+<!-- 📊 Botão para ver gráfico -->
+<div style="margin: 10px 0;">
+  <button onclick="mostrarGrafico()">📊 Ver Gráfico</button>
+</div>
+
+<div id="graficoContainer" style="display:none; position:fixed; top:5%; left:50%; transform:translateX(-50%); background:#fff; border:1px solid #ccc; padding:20px; z-index:9999; box-shadow:0 0 20px rgba(0,0,0,0.3); border-radius:10px;">
+  <canvas id="graficoPizza" width="400" height="400"></canvas>
+  <br />
+  <button onclick="fecharGrafico()">Fechar</button>
+</div>
+
+
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'entrada')">
+      <h2>Entrada</h2>
+      <div id="entradaCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'enviar')">
+      <h2>Enviar orçamento</h2>
+      <div id="enviarCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aguardando')">
+      <h2>Ag. Aprovação</h2>
+      <div id="aguardandoCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aprovado')">
+      <h2>Aprovado!</h2>
+      <div id="aprovadoCol" class="section-container"></div>
+    </div>
+
+    <div class="column">
+      <h2>Em andamento / Ag. Peça / RMA</h2>
+      <div class="section-subtitle">Em andamento</div>
+      <div id="andamentoCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'andamento')"></div>
+      <div class="section-subtitle">Ag. Peça</div>
+      <div id="agordemCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'agordem')"></div>
+      <div class="section-subtitle">RMA</div>
+      <div id="rmaCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'rma')"></div>
+    </div>
+
+    <div class="column">
+      <h2>Pronto / Sem conserto / Reprovado</h2>
+      <div class="section-subtitle">Pronto</div>
+      <div id="prontoCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'pronto')"></div>
+      <div class="section-subtitle">Sem conserto / Reprovado</div>
+      <div id="semconsertoCol" class="section-container" ondragover="allowDrop(event)" ondrop="drop(event, 'semconserto')"></div>
+  </div>
+
+
+  <div id="obsPopup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h3>Observações da OS <span id="obsNumero"></span></h3>
+      <textarea id="obsTexto" rows="6" placeholder="Digite as observações aqui..."></textarea>
+      <div class="popup-actions">
+        <button onclick="salvarObservacoes()">Salvar</button>
+        <button onclick="fecharPopup()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let searchTerm = "";
+    let osAtual = null;
+
+    function allowDrop(e) { e.preventDefault(); }
+
+    async function drop(e, newStatus) {
+      e.preventDefault();
+      const numero = e.dataTransfer.getData("text/plain");
+      if (!numero) return;
+      await fetch(`/api/os/${numero}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      fetchOS();
+    }
+
+    async function fetchOS() {
+      const res = await fetch("/api/os");
+      const data = await res.json();
+      const cols = {
+        entrada: document.getElementById("entradaCol"),
+        enviar: document.getElementById("enviarCol"),
+        aguardando: document.getElementById("aguardandoCol"),
+        aprovado: document.getElementById("aprovadoCol"),
+        andamento: document.getElementById("andamentoCol"),
+        agordem: document.getElementById("agordemCol"),
+        rma: document.getElementById("rmaCol"),
+        pronto: document.getElementById("prontoCol"),
+        semconserto: document.getElementById("semconsertoCol"),
+      };
+      Object.values(cols).forEach(col => col.innerHTML = "");
+      data.sort((a, b) => Number(a.numero) - Number(b.numero));
+      data.forEach(({ numero, status, urgente, observacoes }) => {
+        const div = document.createElement("div");
+        div.className = `os ${status}`;
+        if (urgente) div.classList.add("urgente");
+        div.setAttribute("draggable", "true");
+        if (observacoes) div.setAttribute("data-obs", observacoes.replace(/"/g, "'"));
+        div.addEventListener("dragstart", e => { div.classList.add("dragging"); e.dataTransfer.setData("text/plain", numero); });
+        div.addEventListener("dragend", () => { div.classList.remove("dragging"); });
+        div.innerHTML = `
+          <div class="btn-urgente" onclick="toggleUrgente('${numero}')"></div>
+          <button class="btn-excluir" onclick="deleteOS('${numero}')">&times;</button>
+          <button class="btn-contaazul" onclick="openContaAzul('${numero}')" title="Abrir no ContaAzul">CA</button>
+          <button class="btn-obs" onclick="abrirPopup('${numero}')">✎</button>
+          ${numero}
+        `;
+        if (cols[status]) cols[status].appendChild(div);
+      });
+      if (searchTerm) highlightSearch(searchTerm);
+    }
+
+    async function addOS(e) {
+      e.preventDefault();
+      const numero = document.getElementById("numero").value;
+      const status = document.getElementById("status").value;
+      const res = await fetch("/api/os", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numero, status }),
+      });
+      if (res.ok) { fetchOS(); e.target.reset(); } else { const err = await res.json(); alert("Erro: " + (err.error || "Erro ao adicionar OS.")); }
+    }
+
+    async function toggleUrgente(numero) { await fetch(`/api/os/urgente/${numero}`, { method: "PUT" }); fetchOS(); }
+    async function deleteOS(numero) { if (confirm("Excluir OS " + numero + "?")) { await fetch(`/api/os/${numero}`, { method: "DELETE" }); fetchOS(); }}
+    async function saveNow() { await fetch("/api/save"); alert("Backup salvo."); }
+    function downloadBackup() { window.location.href = "/backup.json"; }
+    async function resetPanel() { if (confirm("Deseja apagar todas as OSs?")) { await fetch("/api/reset", { method: "POST" }); fetchOS(); }}
+    function searchOS() { searchTerm = document.getElementById("searchInput").value.trim(); fetchOS(); }
+    function clearSearch() { searchTerm = ""; document.getElementById("searchInput").value = ""; fetchOS(); }
+    function highlightSearch(term) { document.querySelectorAll(".os").forEach(el => { el.classList.remove("search-highlight"); if (el.textContent.includes(term)) { el.classList.add("search-highlight"); el.scrollIntoView({ behavior: "smooth", block: "center" }); }}); }
+
+    async function abrirPopup(numero) { osAtual = numero; document.getElementById("obsNumero").textContent = numero; const res = await fetch(`/api/os/${numero}`); const dados = await res.json(); document.getElementById("obsTexto").value = dados.observacoes || ""; document.getElementById("obsPopup").style.display = "flex"; }
+    function fecharPopup() { document.getElementById("obsPopup").style.display = "none"; osAtual = null; }
+    async function salvarObservacoes() { const texto = document.getElementById("obsTexto").value; if (!osAtual) return; await fetch(`/api/os/${osAtual}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ observacoes: texto }) }); fecharPopup(); }
+
+    fetchOS(); setInterval(fetchOS, 5000);
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script>
+  let grafico = null;
+
+  function mostrarGrafico() {
+    const container = document.getElementById("graficoContainer");
+    container.style.display = "block";
+
+    if (grafico) {
+      grafico.destroy(); // remove gráfico anterior
+    }
+
+    fetch("/api/os")
+      .then(res => res.json())
+      .then(data => {
+        const contagem = {};
+        data.forEach(os => {
+          contagem[os.status] = (contagem[os.status] || 0) + 1;
+        });
+
+        const cores = {
+          entrada: "#f5f5f5",
+          enviar: "#FFD700",
+          aguardando: "#FFA500",
+          aprovado: "#28a745",
+          andamento: "#007bff",
+          agpeca: "#17a2b8",
+          rma: "#6f42c1",
+          pronto: "#6c757d",
+          semconserto: "#dc3545"
+        };
+
+        const ctx = document.getElementById("graficoPizza").getContext("2d");
+        grafico = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: Object.keys(contagem),
+            datasets: [{
+              data: Object.values(contagem),
+              backgroundColor: Object.keys(contagem).map(status => cores[status] || "#999")
+            }]
+          },
+          options: {
+            plugins: {
+              datalabels: {
+                color: "#fff",
+                font: {
+                  weight: "bold",
+                  size: 14
+                },
+                formatter: (value) => value
+              },
+              legend: {
+                position: "bottom"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || "";
+                    const value = context.raw || 0;
+                    return `${label}: ${value}`;
+                  }
+                }
+              }
+            }
+          },
+          plugins: [ChartDataLabels]
+        });
+      });
+  }
+
+  function fecharGrafico() {
+    document.getElementById("graficoContainer").style.display = "none";
+  }
+
+
+  // ---------- ContaAzul automation trigger ----------
+  async function openContaAzul(numero) {
+    if (!confirm('Abrir OS ' + numero + ' no ContaAzul?')) return;
+    try {
+      // show small overlay if you have status element, otherwise alert
+      // send request to backend to trigger Puppeteer
+      const res = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ numero })
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        alert('Busca disparada — verifique o navegador (uma nova aba será aberta).');
+      } else {
+        alert('Erro ao disparar automação: ' + (data.error || JSON.stringify(data)));
+      }
+    } catch (err) {
+      alert('Falha na requisição: ' + err.message);
+    }
+  }
+  // ---------- end ContaAzul ----------
+
+</script>
+
+
+</body>
+</html>

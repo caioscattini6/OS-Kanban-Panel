@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Solicitação de Serviço - Pinnacle Broadcast</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-8 mt-10">
+    <h1 class="text-2xl font-bold text-blue-700 mb-4">
+      Pinnacle Broadcast - Solicitação de Serviço
+    </h1>
+    <p class="text-sm text-gray-600 mb-6">
+      CNPJ: 33.099.368/0001-08 • Av. Vereador Abel Ferreira nº 1800 / 1844 conj 704 – Jardim Ánalia Franco – CEP: 03372-015 – São Paulo – SP <br>
+      📞 (11) 2605-0563 • ✉️ atendimento@gpinnacle.com
+    </p>
+
+    <form action="http://SEU_SERVIDOR:5678/webhook/pinnacle" method="POST" enctype="multipart/form-data" class="space-y-6">
+      
+      <!-- Dados do Cliente -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Dados do Cliente</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="nome" placeholder="Nome completo" required class="p-2 border rounded w-full">
+          <input name="cpf" placeholder="CPF" required class="p-2 border rounded w-full">
+          <input name="endereco" placeholder="Endereço completo" required class="p-2 border rounded w-full">
+          <input name="cep" placeholder="CEP" required class="p-2 border rounded w-full">
+          <input name="telefone" placeholder="Telefone (WhatsApp)" required class="p-2 border rounded w-full">
+          <input name="email" type="email" placeholder="Email válido" required class="p-2 border rounded w-full">
+        </div>
+      </div>
+
+      <!-- Dados da Empresa -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Dados da Empresa</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="empresa" placeholder="Nome da empresa" class="p-2 border rounded w-full">
+          <input name="cnpj" placeholder="CNPJ da empresa" class="p-2 border rounded w-full">
+          <input name="endereco_empresa" placeholder="Endereço da empresa" class="p-2 border rounded w-full">
+          <input name="email_empresa" type="email" placeholder="Email da empresa" class="p-2 border rounded w-full">
+        </div>
+      </div>
+
+      <!-- Dados do Equipamento -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Dados do Equipamento</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input name="fabricante" placeholder="Fabricante" required class="p-2 border rounded w-full">
+          <input name="modelo" placeholder="Modelo" required class="p-2 border rounded w-full">
+          <input name="serial" placeholder="Número de série" required class="p-2 border rounded w-full">
+          <textarea name="descricao" placeholder="Descrição do problema" required class="p-2 border rounded w-full"></textarea>
+        </div>
+
+        <label class="block mt-2">Foto do problema (opcional): 
+          <input type="file" name="foto" class="mt-1">
+        </label>
+        <label class="block mt-2">Vídeo do problema (opcional): 
+          <input type="file" name="video" class="mt-1">
+        </label>
+        <label class="block mt-2">Nota fiscal / comprovante de compra: 
+          <input type="file" name="nf" required class="mt-1">
+        </label>
+      </div>
+
+      <!-- Forma de envio -->
+      <div>
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Forma de Envio</h2>
+        <select name="envio" required class="p-2 border rounded w-full">
+          <option value="">Selecione...</option>
+          <option value="correios">Correios</option>
+          <option value="transportadora">Transportadora</option>
+          <option value="mao">Entrega em mãos</option>
+        </select>
+
+        <input name="tracking" placeholder="Tracking / Transportadora" class="p-2 border rounded w-full mt-2">
+      </div>
+
+      <!-- Botão -->
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700">
+        Enviar Solicitação
+      </button>
+    </form>
+  </div>
+</body>
+</html>

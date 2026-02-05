@@ -1,0 +1,24 @@
+.aprovado { background: blue; color: white; }
+
+.urgente {
+  animation: piscar 1s infinite;
+}
+
+@keyframes piscar {
+  0%, 100% { background-color: #ff4d4d; }
+  50% { background-color: #ff9999; }
+}
+
+/* New statuses under merged column */
+.agordem { background: purple; color: white; }
+.rma { background: teal; color: white; }
+
+/* Search highlight */
+.search-highlight {
+  outline: 3px solid #ffeb3b;
+  animation: highlight-pulse 2s ease-in-out infinite;
+}
+@keyframes highlight-pulse {
+  0%, 100% { box-shadow: 0 0 8px 4px #ffeb3b; }
+  50% { box-shadow: 0 0 16px 8px #ffee58; }
+}

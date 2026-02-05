@@ -1,0 +1,56 @@
+the panel is working fine
+
+now I want it to show a modern and fluid dashboard, visual oriented,  containing:
+
+- Total number of tickets opened in general
+
+1. daily status (only numbers - based on the colors used on the panel)
+- Total number of tickets 'entrada' today
+- Total number of tickets moved to 'Enviar orçamento' today
+- Total number of tickets moved to 'Ag. Aprovação' today
+- Total number of tickets moved to 'Aprovado' today
+- Total number of tickets moved to 'Pronto' today
+
+2. monthly status 
+- the same above, but monthly based
+
+
+3. Average ticket handling time (in days and hours)
+- Average time from 'entrada' to 'enviar orçamento'
+- Average time from 'enviar orçamento' to 'ag. aprovação'
+- Average time from 'ag. aprovação' to 'aprovado'
+- Average time from 'aprovado' to 'pronto'
+- average time from 'entrada' to 'pronto' - highlited this
+
+4. Yield metrics (pizza graph)
+Ratio between 'pronto' and 'sem conserto'
+
+5. Overtime
+Number of tickets above 10 days opened
+
+
+In the upper section puts 2 and 4 
+In the lower section, 1 and 3
+
+The dashboard will be shown when click on a dynamic arrow in the right-side (that appears only when mouse hovers over it) - then it rolls from right to the left smoothly
+
+
+Tell me which files should be changed and/or created to adapt this dashboard to my working JS structure:
+
+meu-painel-os
+ backup.json
+ data.json
+ package.json
+ package-lock.json
+ server.js
+  \public
+  index.html
+  \css
+  styles.css
+  
+
+
+
+
+
+

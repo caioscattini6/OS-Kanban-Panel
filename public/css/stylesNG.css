@@ -1,0 +1,134 @@
+.aprovado { background: blue; color: white; }
+.entrada { background: gray; color: white; }
+.enviar { background: black; color: white; }
+.aguardando { background: goldenrod; color: black; }
+.andamento { background: darkorange; color: white; }
+.pronto { background: darkgreen; color: white; }
+
+.peca { background: #8e24aa; color: white; }
+.rma { background: #00acc1; color: white; }
+
+.os {
+  position: relative;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  min-height: 32px;
+}
+
+.urgente {
+  animation: piscar 1s infinite;
+}
+
+@keyframes piscar {
+  0%, 100% { background-color: #ff4d4d; }
+  50% { background-color: #ff9999; }
+}
+
+.btn-urgente {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  background-color: #bbb;
+  border: 1px solid #999;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.urgente .btn-urgente {
+  background-color: red;
+}
+
+.btn-excluir {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  color: white;
+  font-size: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Destaque ao buscar */
+.destaque {
+  outline: 3px solid yellow;
+  animation: brilho 1s infinite alternate;
+}
+@keyframes brilho {
+  from { outline-color: yellow; }
+  to { outline-color: orange; }
+}
+
+/* Layout responsivo */
+@media (max-width: 768px) {
+  .columns {
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  .column {
+    flex: unset;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  body {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .form, header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form input, .form select, .form button,
+  header button {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .columns {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .column {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    min-width: 250px;
+  }
+
+  .column h2 {
+    font-size: 15px;
+  }
+
+  .column-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .os {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-excluir {
+    top: 6px;
+    right: 6px;
+    font-size: 14px;
+  }
+
+  .btn-urgente {
+    top: 6px;
+    left: 6px;
+    width: 14px;
+    height: 14px;
+  }
+}

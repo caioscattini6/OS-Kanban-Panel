@@ -1,0 +1,22 @@
+[
+  {
+    "numero": "6000",
+    "status": "aguardando"
+  },
+  {
+    "numero": "6013",
+    "status": "aguardando"
+  },
+  {
+    "numero": "6017",
+    "status": "semconserto"
+  },
+  {
+    "numero": "6060",
+    "status": "pronto"
+  },
+  {
+    "numero": "6001",
+    "status": "semconserto"
+  }
+]

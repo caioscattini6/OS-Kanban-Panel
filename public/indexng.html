@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel de OS</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      padding: 20px;
+      margin: 0;
+      box-sizing: border-box;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
+    header, .form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .form input, .form select, .form button {
+      padding: 6px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+
+    .form button {
+      background-color: #00c853;
+      cursor: pointer;
+    }
+
+    /* Columns container fully uses screen height minus headers and forms */
+    .columns {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+      overflow: hidden;
+      height: calc(100vh - 190px); /* adjust to overall header, forms height */
+    }
+
+    .column {
+      background: #1e1e1e;
+      border-radius: 6px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-sizing: border-box;
+      /* Avoid scrolling inside */
+      overflow: hidden;
+    }
+
+    .column > h2 {
+      text-align: center;
+      font-size: 16px;
+      margin: 0 0 12px 0;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      margin-bottom: 6px;
+      text-align: center;
+      user-select: none;
+      color: #bbb;
+      flex-shrink: 0;
+    }
+
+    /* Section container fixed height to show exactly two rows of fixed-size boxes, no scroll */
+    .section-container {
+      display: grid;
+      /* Two rows fixed for boxes */
+      grid-template-rows: repeat(2, 60px);
+      /* Columns auto-fill to fill width */
+      grid-template-columns: repeat(auto-fill, 160px);
+      gap: 8px;
+      /* Set height: 2 rows * box height + gaps */
+      height: calc(2 * 60px + 8px); /* 2 rows + one gap between rows */
+      /* prevent scrolling */
+      overflow: hidden;
+      background: #2b2b2b;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 4px;
+      box-sizing: border-box;
+      justify-content: center; /* center columns if less items */
+      /* Allow horizontal scroll if many items */
+      overflow-x: auto;
+      overflow-y: hidden;
+      /* Prevent vertical scrollbar but accept horizontal */
+      scrollbar-width: thin;
+    }
+
+    /* OS boxes: fixed size set explicitly */
+    .os {
+      width: 160px;
+      height: 60px;
+      padding: 6px 10px;
+      font-size: 13px;
+      user-select: none;
+      cursor: grab;
+      position: relative;
+      font-weight: bold;
+      border-radius: 4px;
+      word-break: break-word;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+
+    /* Status colors */
+    .entrada { background: gray; color: white; }
+    .enviar { background: black; color: white; }
+    .aguardando { background: goldenrod; color: black; }
+    .aprovado { background: #1e40af; color: white; }
+    .andamento { background: darkorange; color: white; }
+    .agordem { background: purple; color: white; }
+    .rma { background: teal; color: white; }
+    .pronto { background: darkgreen; color: white; }
+
+    .urgente {
+      animation: pulsar 1s infinite;
+    }
+
+    @keyframes pulsar {
+      0%, 100% { filter: brightness(100%); }
+      50% { filter: brightness(130%); }
+    }
+
+    /* Buttons inside OS box */
+    .btn-urgente {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 12px;
+      height: 12px;
+      background-color: #bbb;
+      border: 1px solid #999;
+      border-radius: 50%;
+      cursor: pointer;
+      user-select: none;
+      z-index: 2;
+    }
+
+    .urgente .btn-urgente {
+      background-color: red;
+    }
+
+    .btn-excluir {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      color: white;
+      font-size: 14px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      user-select: none;
+      z-index: 2;
+      line-height: 1;
+      padding: 0;
+    }
+
+    /* Highlight for search */
+    .search-highlight {
+      outline: 3px solid #ffeb3b;
+      animation: highlight-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes highlight-pulse {
+      0%, 100% { box-shadow: 0 0 8px 4px #ffeb3b; }
+      50% { box-shadow: 0 0 16px 8px #ffee58; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      header, .form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .form input, .form select, .form button,
+      header button {
+        width: 100%;
+        margin-bottom: 6px;
+      }
+
+      .columns {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        height: calc(100vh - 240px);
+      }
+
+      .section-container {
+        grid-template-columns: repeat(auto-fill, 140px);
+        height: calc(2 * 60px + 8px);
+      }
+
+      .os {
+        width: 140px;
+        height: 60px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div style="background:#004d40;color:#fff;padding:10px;text-align:center;font-weight:bold;">
+    ✅ Atualizado
+  </div>
+  <header>
+    <h1>Painel de OS - Assistência Técnica Pinnacle</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="downloadBackup()">Backup</button>
+      <button onclick="resetPanel()">Resetar</button>
+    </div>
+  </header>
+
+  <form class="form" onsubmit="addOS(event)">
+    <input type="number" id="numero" placeholder="Número da OS (4 dígitos)" required min="1000" max="9999" />
+    <select id="status">
+      <option value="entrada">Entrada</option>
+      <option value="enviar">Enviar orçamento</option>
+      <option value="aguardando">Ag. Aprovação</option>
+      <option value="aprovado">Aprovado!</option>
+      <option value="andamento">Em andamento</option>
+      <option value="agordem">Ag. Ordem</option>
+      <option value="rma">RMA</option>
+      <option value="pronto">Pronto</option>
+    </select>
+    <button type="submit">Adicionar OS</button>
+  </form>
+
+  <form id="searchForm" onsubmit="searchOS(event)" style="margin:10px 0; display:flex; gap:6px; justify-content:center;">
+    <input type="text" id="searchInput" placeholder="Buscar OS..." style="padding:6px; font-size:14px; border-radius:5px; border:none; background:#1e1e1e; color:#fff; width:200px;" />
+    <button type="submit" style="padding:6px 12px; font-size:14px; border:none; border-radius:5px; background:#00c853; color:#fff; cursor:pointer;">Buscar</button>
+    <button type="button" onclick="clearSearch()" style="padding:6px 12px; font-size:14px; border:none; border-radius:5px; background:#f44336; color:#fff; cursor:pointer;">Limpar</button>
+  </form>
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'entrada')">
+      <h2>Entrada</h2>
+      <div id="entradaCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'enviar')">
+      <h2>Enviar orçamento</h2>
+      <div id="enviarCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aguardando')">
+      <h2>Ag. Aprovação</h2>
+      <div id="aguardandoCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'aprovado')">
+      <h2>Aprovado!</h2>
+      <div id="aprovadoCol" class="section-container"></div>
+    </div>
+
+    <div class="column">
+      <h2>Em andamento / Ag. Ordem / RMA</h2>
+
+      <div>
+        <div class="section-subtitle">Em andamento</div>
+        <div 
+          id="andamentoCol" 
+          class="section-container"
+          ondragover="allowDrop(event)" 
+          ondrop="drop(event, 'andamento')"
+        ></div>
+      </div>
+
+      <div>
+        <div class="section-subtitle">Ag. Ordem</div>
+        <div 
+          id="agordemCol" 
+          class="section-container"
+          ondragover="allowDrop(event)" 
+          ondrop="drop(event, 'agordem')"
+        ></div>
+      </div>
+
+      <div>
+        <div class="section-subtitle">RMA</div>
+        <div 
+          id="rmaCol" 
+          class="section-container"
+          ondragover="allowDrop(event)" 
+          ondrop="drop(event, 'rma')"
+        ></div>
+      </div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'pronto')">
+      <h2>Pronto</h2>
+      <div id="prontoCol" class="section-container"></div>
+    </div>
+  </div>
+
+  <script>
+    let searchTerm = "";
+
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
+    async function drop(e, newStatus) {
+      e.preventDefault();
+      const numero = e.dataTransfer.getData("text/plain");
+      if (!numero) return;
+      await fetch(`/api/os/${numero}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      fetchOS();
+    }
+
+    async function fetchOS() {
+      const res = await fetch("/api/os");
+      const data = await res.json();
+
+      const cols = {
+        entrada: document.getElementById("entradaCol"),
+        enviar: document.getElementById("enviarCol"),
+        aguardando: document.getElementById("aguardandoCol"),
+        aprovado: document.getElementById("aprovadoCol"),
+        andamento: document.getElementById("andamentoCol"),
+        agordem: document.getElementById("agordemCol"),
+        rma: document.getElementById("rmaCol"),
+        pronto: document.getElementById("prontoCol"),
+      };
+
+      Object.values(cols).forEach((col) => (col.innerHTML = ""));
+
+      // Sort numeric ascending by numero
+      data.sort((a, b) => Number(a.numero) - Number(b.numero));
+
+      data.forEach(({ numero, status, urgente }) => {
+        const div = document.createElement("div");
+
+        let colKey = status;
+
+        div.className = `os ${status}`;
+
+        if (urgente) div.classList.add("urgente");
+
+        div.setAttribute("draggable", "true");
+        div.addEventListener("dragstart", (e) => {
+          e.dataTransfer.setData("text/plain", numero);
+        });
+
+        div.innerHTML = `
+          <div class="btn-urgente" onclick="toggleUrgente('${numero}')"></div>
+          <button class="btn-excluir" onclick="deleteOS('${numero}')">&times;</button>
+          ${numero}
+        `;
+
+        cols[colKey].appendChild(div);
+      });
+
+      if (searchTerm) highlightSearch(searchTerm);
+    }
+
+    async function addOS(e) {
+      e.preventDefault();
+      const numero = document.getElementById("numero").value;
+      const status = document.getElementById("status").value;
+
+      const res = await fetch("/api/os", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numero, status }),
+      });
+
+      if (res.ok) {
+        fetchOS();
+        e.target.reset();
+      } else {
+        const err = await res.json();
+        alert("Erro: " + (err.error || "Erro ao adicionar OS."));
+      }
+    }
+
+    async function toggleUrgente(numero) {
+      await fetch(`/api/os/urgente/${numero}`, { method: "PUT" });
+      fetchOS();
+    }
+
+    async function deleteOS(numero) {
+      if (confirm("Excluir OS " + numero + "?")) {
+        await fetch(`/api/os/${numero}`, { method: "DELETE" });
+        fetchOS();
+      }
+    }
+
+    async function saveNow() {
+      await fetch("/api/save");
+      alert("Backup salvo.");
+    }
+
+    function downloadBackup() {
+      window.location.href = "/backup.json";
+    }
+
+    async function resetPanel() {
+      if (confirm("Deseja apagar todas as OSs?")) {
+        await fetch("/api/reset", { method: "POST" });
+        fetchOS();
+      }
+    }
+
+    function searchOS(e) {
+      e.preventDefault();
+      const input = document.getElementById("searchInput");
+      searchTerm = input.value.trim();
+      if (!searchTerm) {
+        clearSearch();
+        return;
+      }
+      fetchOS();
+    }
+
+    function clearSearch() {
+      searchTerm = "";
+      document.getElementById("searchInput").value = "";
+      fetchOS();
+    }
+
+    function highlightSearch(term) {
+      if (!term) return;
+
+      const osDivs = document.querySelectorAll(".os");
+      let firstFound = false;
+      osDivs.forEach(div => {
+        if (div.textContent.includes(term)) {
+          div.classList.add("search-highlight");
+          if (!firstFound) {
+            div.scrollIntoView({ behavior: "smooth", block: "center" });
+            firstFound = true;
+          }
+        } else {
+          div.classList.remove("search-highlight");
+        }
+      });
+    }
+
+    fetchOS();
+    setInterval(fetchOS, 5000);
+  </script>
+</body>
+</html>

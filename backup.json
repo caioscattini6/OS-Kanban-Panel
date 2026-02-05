@@ -1,0 +1,1245 @@
+[
+  {
+    "numero": "5977",
+    "status": "rma",
+    "urgente": false
+  },
+  {
+    "numero": "6049",
+    "status": "semconserto",
+    "urgente": true
+  },
+  {
+    "numero": "6135",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "MENSAGEM ENVIADA"
+  },
+  {
+    "numero": "6048",
+    "status": "rma",
+    "urgente": false
+  },
+  {
+    "numero": "6199",
+    "status": "andamento",
+    "urgente": false
+  },
+  {
+    "numero": "5865",
+    "status": "aprovado",
+    "urgente": false
+  },
+  {
+    "numero": "6229",
+    "status": "rma",
+    "urgente": false
+  },
+  {
+    "numero": "6236",
+    "status": "rma",
+    "urgente": true
+  },
+  {
+    "numero": "6241",
+    "status": "rma",
+    "urgente": false
+  },
+  {
+    "numero": "6255",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6259",
+    "status": "rma",
+    "urgente": true,
+    "observacoes": ""
+  },
+  {
+    "numero": "6176",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6275",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6285",
+    "status": "agordem",
+    "urgente": true,
+    "observacoes": ""
+  },
+  {
+    "numero": "6292",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6293",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6302",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": ""
+  },
+  {
+    "numero": "6307",
+    "status": "rma",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-18T13:51:56.227Z"
+  },
+  {
+    "numero": "6308",
+    "status": "rma",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-18T13:59:15.414Z"
+  },
+  {
+    "numero": "6337",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-24T17:51:47.607Z"
+  },
+  {
+    "numero": "6340",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-28T13:37:18.962Z",
+    "history": [
+      {
+        "status": "semconserto",
+        "at": "2025-09-09T14:26:56.051Z"
+      }
+    ]
+  },
+  {
+    "numero": "6341",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-28T13:50:19.107Z",
+    "history": [
+      {
+        "status": "semconserto",
+        "at": "2025-09-09T14:27:10.199Z"
+      }
+    ]
+  },
+  {
+    "numero": "6348",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-07-31T14:10:28.415Z",
+    "history": [
+      {
+        "status": "enviar",
+        "at": "2025-09-08T13:07:02.132Z"
+      },
+      {
+        "status": "aguardando",
+        "at": "2025-09-08T18:44:48.413Z"
+      }
+    ]
+  },
+  {
+    "numero": "6351",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-08-04T13:36:09.720Z"
+  },
+  {
+    "numero": "6401",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "PEDIR RMA ",
+    "criadoEm": "2025-08-21T12:41:32.388Z"
+  },
+  {
+    "numero": "6424",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-08-29T14:07:34.943Z"
+  },
+  {
+    "numero": "6426",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-08-29T14:26:13.822Z"
+  },
+  {
+    "numero": "6457",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-09-15T12:37:03.877Z"
+  },
+  {
+    "numero": "6478",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-09-19T13:01:32.421Z"
+  },
+  {
+    "numero": "6483",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-09-22T12:29:33.094Z"
+  },
+  {
+    "numero": "6493",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "ja falei com cliente",
+    "criadoEm": "2025-09-30T12:41:34.162Z"
+  },
+  {
+    "numero": "6494",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-09-30T16:26:00.715Z"
+  },
+  {
+    "numero": "6506",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-02T15:06:19.382Z"
+  },
+  {
+    "numero": "6517",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-08T13:15:44.201Z"
+  },
+  {
+    "numero": "6521",
+    "status": "andamento",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-10T14:52:51.085Z"
+  },
+  {
+    "numero": "6522",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-10T15:53:14.211Z"
+  },
+  {
+    "numero": "6286",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-13T13:07:14.259Z"
+  },
+  {
+    "numero": "6548",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-20T18:25:53.775Z"
+  },
+  {
+    "numero": "6557",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T12:48:42.610Z"
+  },
+  {
+    "numero": "6558",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T12:51:29.790Z"
+  },
+  {
+    "numero": "6561",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T13:04:30.120Z"
+  },
+  {
+    "numero": "6562",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T13:04:34.606Z"
+  },
+  {
+    "numero": "6563",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T13:15:52.659Z"
+  },
+  {
+    "numero": "6565",
+    "status": "andamento",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-27T14:07:10.895Z"
+  },
+  {
+    "numero": "6577",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-10-28T19:31:01.156Z"
+  },
+  {
+    "numero": "6588",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-30T18:37:29.295Z"
+  },
+  {
+    "numero": "6591",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-10-31T20:24:04.554Z"
+  },
+  {
+    "numero": "6505",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-03T19:11:33.905Z"
+  },
+  {
+    "numero": "6618",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-05T18:37:55.863Z"
+  },
+  {
+    "numero": "6625",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-12T14:52:15.597Z"
+  },
+  {
+    "numero": "6630",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-12T19:09:24.651Z"
+  },
+  {
+    "numero": "6631",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-12T19:09:28.439Z"
+  },
+  {
+    "numero": "6636",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-13T19:20:36.228Z"
+  },
+  {
+    "numero": "6637",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-13T19:20:39.976Z"
+  },
+  {
+    "numero": "6641",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:16:37.197Z"
+  },
+  {
+    "numero": "6642",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:16:47.980Z"
+  },
+  {
+    "numero": "6643",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:16:57.740Z"
+  },
+  {
+    "numero": "6644",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:17:03.667Z"
+  },
+  {
+    "numero": "6645",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:17:10.147Z"
+  },
+  {
+    "numero": "6646",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:17:18.091Z"
+  },
+  {
+    "numero": "6648",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T14:42:50.024Z"
+  },
+  {
+    "numero": "6652",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-17T18:02:21.412Z"
+  },
+  {
+    "numero": "6664",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T13:58:07.094Z"
+  },
+  {
+    "numero": "6665",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T14:35:48.878Z"
+  },
+  {
+    "numero": "6666",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "nao responde o whatsapp e nem email",
+    "criadoEm": "2025-11-24T14:55:52.496Z"
+  },
+  {
+    "numero": "6667",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:39:09.918Z"
+  },
+  {
+    "numero": "6668",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:39:12.038Z"
+  },
+  {
+    "numero": "6669",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:39:14.723Z"
+  },
+  {
+    "numero": "6670",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:39:16.755Z"
+  },
+  {
+    "numero": "6671",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:39:19.819Z"
+  },
+  {
+    "numero": "6640",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-24T17:56:54.751Z"
+  },
+  {
+    "numero": "6672",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-11-25T16:30:16.965Z"
+  },
+  {
+    "numero": "6334",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-25T19:26:44.505Z"
+  },
+  {
+    "numero": "6684",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-11-28T17:15:09.692Z"
+  },
+  {
+    "numero": "6691",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-02T13:55:09.993Z"
+  },
+  {
+    "numero": "6692",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-02T13:55:14.868Z"
+  },
+  {
+    "numero": "6694",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-02T20:07:56.964Z"
+  },
+  {
+    "numero": "6587",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-03T12:46:54.136Z"
+  },
+  {
+    "numero": "6698",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-03T18:11:49.677Z"
+  },
+  {
+    "numero": "6638",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-08T12:11:26.703Z"
+  },
+  {
+    "numero": "6639",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-08T12:11:47.809Z"
+  },
+  {
+    "numero": "6700",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-08T13:38:00.864Z"
+  },
+  {
+    "numero": "6703",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-11T17:32:15.794Z"
+  },
+  {
+    "numero": "6704",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-11T18:10:48.709Z"
+  },
+  {
+    "numero": "6705",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T18:59:57.956Z"
+  },
+  {
+    "numero": "6706",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:00.040Z"
+  },
+  {
+    "numero": "6707",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:02.823Z"
+  },
+  {
+    "numero": "6708",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:05.137Z"
+  },
+  {
+    "numero": "6709",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:07.004Z"
+  },
+  {
+    "numero": "6710",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:08.788Z"
+  },
+  {
+    "numero": "6711",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:10.776Z"
+  },
+  {
+    "numero": "6712",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:12.987Z"
+  },
+  {
+    "numero": "6713",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:14.820Z"
+  },
+  {
+    "numero": "6714",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:16.804Z"
+  },
+  {
+    "numero": "6715",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:18.424Z"
+  },
+  {
+    "numero": "6716",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:20.239Z"
+  },
+  {
+    "numero": "6717",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:21.944Z"
+  },
+  {
+    "numero": "6718",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:23.808Z"
+  },
+  {
+    "numero": "6719",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:25.787Z"
+  },
+  {
+    "numero": "6720",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:27.467Z"
+  },
+  {
+    "numero": "6721",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:29.236Z"
+  },
+  {
+    "numero": "6722",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:31.512Z"
+  },
+  {
+    "numero": "6723",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:33.188Z"
+  },
+  {
+    "numero": "6724",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:35.001Z"
+  },
+  {
+    "numero": "6725",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:37.056Z"
+  },
+  {
+    "numero": "6726",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:39.456Z"
+  },
+  {
+    "numero": "6727",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-12T19:00:41.068Z"
+  },
+  {
+    "numero": "6735",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-15T19:51:54.640Z"
+  },
+  {
+    "numero": "6737",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-16T13:06:11.275Z"
+  },
+  {
+    "numero": "6676",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-16T18:33:15.851Z"
+  },
+  {
+    "numero": "6742",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-17T16:47:48.287Z"
+  },
+  {
+    "numero": "6739",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-17T16:47:57.024Z"
+  },
+  {
+    "numero": "6740",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-17T16:48:00.219Z"
+  },
+  {
+    "numero": "6741",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2025-12-17T16:48:02.002Z"
+  },
+  {
+    "numero": "6744",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-18T17:25:54.626Z"
+  },
+  {
+    "numero": "6745",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2025-12-18T17:25:56.585Z"
+  },
+  {
+    "numero": "6759",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-06T14:11:24.834Z"
+  },
+  {
+    "numero": "6765",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-07T19:15:45.645Z"
+  },
+  {
+    "numero": "6766",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-07T19:32:36.714Z"
+  },
+  {
+    "numero": "6770",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-09T16:27:21.933Z"
+  },
+  {
+    "numero": "6771",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-09T16:27:24.684Z"
+  },
+  {
+    "numero": "6773",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-09T17:22:47.382Z"
+  },
+  {
+    "numero": "6774",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-09T17:22:49.561Z"
+  },
+  {
+    "numero": "6775",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-09T17:22:51.949Z"
+  },
+  {
+    "numero": "6777",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-12T17:59:20.799Z"
+  },
+  {
+    "numero": "6781",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-13T16:44:21.692Z"
+  },
+  {
+    "numero": "6782",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-13T16:44:24.471Z"
+  },
+  {
+    "numero": "6783",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-13T16:50:20.686Z"
+  },
+  {
+    "numero": "6790",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-15T13:47:26.560Z"
+  },
+  {
+    "numero": "6791",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-15T13:47:28.758Z"
+  },
+  {
+    "numero": "6802",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-19T14:22:45.257Z"
+  },
+  {
+    "numero": "6804",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-19T18:16:13.934Z"
+  },
+  {
+    "numero": "6805",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-19T18:33:00.008Z"
+  },
+  {
+    "numero": "6807",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-20T18:07:49.276Z"
+  },
+  {
+    "numero": "6795",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-20T20:11:13.836Z"
+  },
+  {
+    "numero": "6808",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T12:40:50.114Z"
+  },
+  {
+    "numero": "6675",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T17:31:23.821Z"
+  },
+  {
+    "numero": "6031",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T17:39:06.342Z"
+  },
+  {
+    "numero": "5673",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T17:42:28.535Z"
+  },
+  {
+    "numero": "6809",
+    "status": "aprovado",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T18:38:28.237Z"
+  },
+  {
+    "numero": "6810",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T19:20:15.916Z"
+  },
+  {
+    "numero": "6811",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T19:25:21.282Z"
+  },
+  {
+    "numero": "6812",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T19:42:21.549Z"
+  },
+  {
+    "numero": "6813",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-21T20:04:07.032Z"
+  },
+  {
+    "numero": "6816",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T18:32:02.222Z"
+  },
+  {
+    "numero": "6817",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T18:50:22.324Z"
+  },
+  {
+    "numero": "6818",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T18:50:24.299Z"
+  },
+  {
+    "numero": "6819",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T18:50:26.705Z"
+  },
+  {
+    "numero": "6820",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T19:04:22.198Z"
+  },
+  {
+    "numero": "6821",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-22T19:04:24.044Z"
+  },
+  {
+    "numero": "6823",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-26T17:37:22.194Z"
+  },
+  {
+    "numero": "6825",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-26T20:44:13.482Z"
+  },
+  {
+    "numero": "6826",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-27T17:49:49.356Z"
+  },
+  {
+    "numero": "6827",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-27T20:09:59.271Z"
+  },
+  {
+    "numero": "6828",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-28T14:13:44.946Z"
+  },
+  {
+    "numero": "6829",
+    "status": "pronto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T18:26:21.498Z"
+  },
+  {
+    "numero": "6832",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T19:04:44.034Z"
+  },
+  {
+    "numero": "6833",
+    "status": "pronto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T19:49:47.082Z"
+  },
+  {
+    "numero": "6834",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T19:49:49.851Z"
+  },
+  {
+    "numero": "6835",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T20:00:41.962Z"
+  },
+  {
+    "numero": "6836",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-29T20:00:43.829Z"
+  },
+  {
+    "numero": "6839",
+    "status": "pronto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-01-30T19:12:20.701Z"
+  },
+  {
+    "numero": "6840",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-01-30T19:20:16.173Z"
+  },
+  {
+    "numero": "6842",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T14:09:43.419Z"
+  },
+  {
+    "numero": "6843",
+    "status": "semconserto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T14:09:44.961Z"
+  },
+  {
+    "numero": "6844",
+    "status": "aguardando",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T19:46:09.405Z"
+  },
+  {
+    "numero": "6845",
+    "status": "aguardando",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T20:02:18.297Z"
+  },
+  {
+    "numero": "6846",
+    "status": "aguardando",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T20:02:19.667Z"
+  },
+  {
+    "numero": "6847",
+    "status": "semconserto",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-02-02T20:02:21.461Z"
+  },
+  {
+    "numero": "6848",
+    "status": "agordem",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T16:13:25.794Z"
+  },
+  {
+    "numero": "6849",
+    "status": "aprovado",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T17:59:15.778Z"
+  },
+  {
+    "numero": "6850",
+    "status": "pronto",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T18:15:35.747Z"
+  },
+  {
+    "numero": "6851",
+    "status": "enviar",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T18:27:02.860Z"
+  },
+  {
+    "numero": "6852",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T18:55:15.560Z"
+  },
+  {
+    "numero": "6853",
+    "status": "aguardando",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T19:04:32.354Z"
+  },
+  {
+    "numero": "6854",
+    "status": "aguardando",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-03T19:37:21.596Z"
+  },
+  {
+    "numero": "6855",
+    "status": "rma",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-04T17:55:30.213Z"
+  },
+  {
+    "numero": "6856",
+    "status": "entrada",
+    "urgente": true,
+    "observacoes": "",
+    "criadoEm": "2026-02-04T19:18:39.620Z"
+  }
+]

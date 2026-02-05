@@ -1,0 +1,30 @@
+
+<!-- Este é um exemplo representativo. No seu projeto real, substitua todas as referências a "semconserto" por "andamento" e atualize os rótulos de interface. -->
+<!-- No CSS -->
+<style>
+  .andamento { background: darkorange; color: white; }
+</style>
+
+<!-- No formulário -->
+<select id="status">
+  <option value="enviar">Enviar orçamento</option>
+  <option value="aguardando">Ag. Aprovação</option>
+  <option value="aprovado">Aprovado!</option>
+  <option value="andamento">Em andamento</option>
+  <option value="pronto">Pronto</option>
+</select>
+
+<!-- Na área das colunas -->
+<div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'andamento')">
+  <h2>Em andamento</h2>
+  <div class="column-grid" id="andamentoCol"></div>
+</div>
+
+<!-- No JavaScript -->
+const cols = {
+  enviar: document.getElementById("enviarCol"),
+  aguardando: document.getElementById("aguardandoCol"),
+  aprovado: document.getElementById("aprovadoCol"),
+  andamento: document.getElementById("andamentoCol"),
+  pronto: document.getElementById("prontoCol"),
+};
