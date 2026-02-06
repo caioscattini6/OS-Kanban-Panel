@@ -971,8 +971,8 @@
   },
   {
     "numero": "6809",
-    "status": "aprovado",
-    "urgente": true,
+    "status": "pronto",
+    "urgente": false,
     "observacoes": "",
     "criadoEm": "2026-01-21T18:38:28.237Z"
   },
@@ -1048,7 +1048,7 @@
   },
   {
     "numero": "6823",
-    "status": "aprovado",
+    "status": "pronto",
     "urgente": false,
     "observacoes": "",
     "criadoEm": "2026-01-26T17:37:22.194Z"
@@ -1104,8 +1104,8 @@
   },
   {
     "numero": "6834",
-    "status": "aguardando",
-    "urgente": true,
+    "status": "aprovado",
+    "urgente": false,
     "observacoes": "",
     "criadoEm": "2026-01-29T19:49:49.851Z"
   },
@@ -1237,9 +1237,44 @@
   },
   {
     "numero": "6856",
-    "status": "entrada",
+    "status": "aguardando",
     "urgente": true,
     "observacoes": "",
     "criadoEm": "2026-02-04T19:18:39.620Z"
+  },
+  {
+    "numero": "6857",
+    "status": "entrada",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-05T17:59:19.134Z"
+  },
+  {
+    "numero": "6858",
+    "status": "entrada",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-05T17:59:22.218Z"
+  },
+  {
+    "numero": "6859",
+    "status": "entrada",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-05T17:59:24.981Z"
+  },
+  {
+    "numero": "6860",
+    "status": "entrada",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-05T17:59:26.861Z"
+  },
+  {
+    "numero": "6861",
+    "status": "entrada",
+    "urgente": false,
+    "observacoes": "",
+    "criadoEm": "2026-02-05T17:59:29.121Z"
   }
 ]

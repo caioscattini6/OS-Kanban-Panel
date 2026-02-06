@@ -28,9 +28,10 @@ if (fs.existsSync(DATA_FILE)) {
   ordemServico = JSON.parse(fs.readFileSync(DATA_FILE));
 }
 
-// Retorna todas as OS
+// Retorna todas as OS (sem as arquivadas)
 app.get('/api/os', (req, res) => {
-  res.json(ordemServico);
+  const activeOS = ordemServico.filter(os => !os.archived);
+  res.json(activeOS);
 });
 
 // Cria nova OS
@@ -39,21 +40,21 @@ app.post('/api/os', (req, res) => {
   if (!numero || !status || !STATUS_VALIDOS.includes(status)) {
     return res.status(400).json({ error: 'Número ou status inválido' });
   }
-  if (ordemServico.find(o => o.numero === numero)) {
+  if (ordemServico.find(o => o.numero === numero && !o.archived)) {
     return res.status(400).json({ error: 'OS já existente' });
   }
-  ordemServico.push({ numero, status, urgente: false, observacoes: "", criadoEm: new Date().toISOString() });
+  ordemServico.push({ numero, status, urgente: false, observacoes: "", archived: false, criadoEm: new Date().toISOString() });
   fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));
   res.status(201).json({ success: true });
 });
 
-// Atualiza status, urgente ou observações
+// Atualiza status, urgente, observações ou archived
 app.put('/api/os/:numero', (req, res) => {
   const numero = req.params.numero;
   const index = ordemServico.findIndex(o => o.numero === numero);
   if (index === -1) return res.status(404).json({ error: 'OS não encontrada' });
 
-  const { status, urgente, observacoes } = req.body;
+  const { status, urgente, observacoes, archived } = req.body;
 
   if (status && !STATUS_VALIDOS.includes(status)) {
     return res.status(400).json({ error: 'Status inválido' });
@@ -62,6 +63,7 @@ app.put('/api/os/:numero', (req, res) => {
   if (status) ordemServico[index].status = status;
   if (typeof urgente === 'boolean') ordemServico[index].urgente = urgente;
   if (typeof observacoes === 'string') ordemServico[index].observacoes = observacoes;
+  if (typeof archived === 'boolean') ordemServico[index].archived = archived;
 
   // ✅ Agora salva as alterações no arquivo
   fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));
@@ -76,6 +78,7 @@ app.put('/api/os/urgente/:numero', (req, res) => {
   const os = ordemServico.find(o => o.numero === numero);
   if (!os) return res.status(404).json({ error: 'OS não encontrada' });
   os.urgente = !os.urgente;
+  fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));
   res.json({ success: true });
 });
 
@@ -86,11 +89,12 @@ app.get('/api/os/:numero', (req, res) => {
   res.json(os);
 });
 
-// Exclui OS
+// Exclui OS permanentemente
 app.delete('/api/os/:numero', (req, res) => {
   const index = ordemServico.findIndex(o => o.numero === req.params.numero);
   if (index === -1) return res.status(404).json({ error: 'OS não encontrada' });
   ordemServico.splice(index, 1);
+  fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));
   res.json({ success: true });
 });
 

@@ -167,6 +167,52 @@
       from { outline-color: yellow; }
       to { outline-color: orange; }
     }
+    #archiveDeleteDialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    #archiveDeleteDialog > div {
+      background: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      color: #e0e0e0;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+    #archiveDeleteDialog h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+    #archiveDeleteDialog button {
+      margin: 0 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #archiveDeleteDialog .btn-archive {
+      background-color: #FFA500;
+      color: black;
+    }
+    #archiveDeleteDialog .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+    #archiveDeleteDialog .btn-cancel {
+      background-color: #666;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -196,13 +242,6 @@
     <button type="button" onclick="searchOS()">Buscar</button>
     <button type="button" onclick="clearSearch()">Limpar</button>
   </form>
-
-<form class="form" onsubmit="addOS(event)">
-  ...
-  <button type="submit">Adicionar OS</button>
-  <button type="button" onclick="searchOS()">Buscar</button>
-  <button type="button" onclick="clearSearch()">Limpar</button>
-</form>
 
 <!-- 📊 Botão para ver gráfico -->
 <div style="margin: 10px 0;">
@@ -265,6 +304,15 @@
         <button onclick="salvarObservacoes()">Salvar</button>
         <button onclick="fecharPopup()">Fechar</button>
       </div>
+    </div>
+  </div>
+
+  <div id="archiveDeleteDialog" style="display:none;">
+    <div>
+      <h3>O que fazer com a OS <span id="deleteOSNumero"></span>?</h3>
+      <button class="btn-archive" onclick="archiveOS()">📦 Arquivar</button>
+      <button class="btn-delete" onclick="permanentlyDeleteOS()">🗑️ Deletar</button>
+      <button class="btn-cancel" onclick="cancelDelete()">Cancelar</button>
     </div>
   </div>
 
@@ -334,7 +382,11 @@
     }
 
     async function toggleUrgente(numero) { await fetch(`/api/os/urgente/${numero}`, { method: "PUT" }); fetchOS(); }
-    async function deleteOS(numero) { if (confirm("Excluir OS " + numero + "?")) { await fetch(`/api/os/${numero}`, { method: "DELETE" }); fetchOS(); }}
+    let osToDelete = null;
+    function deleteOS(numero) { osToDelete = numero; document.getElementById("deleteOSNumero").textContent = numero; document.getElementById("archiveDeleteDialog").style.display = "flex"; }
+    async function archiveOS() { if (!osToDelete) return; await fetch(`/api/os/${osToDelete}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ archived: true }) }); cancelDelete(); fetchOS(); }
+    async function permanentlyDeleteOS() { if (!osToDelete) return; await fetch(`/api/os/${osToDelete}`, { method: "DELETE" }); cancelDelete(); fetchOS(); }
+    function cancelDelete() { osToDelete = null; document.getElementById("archiveDeleteDialog").style.display = "none"; }
     async function saveNow() { await fetch("/api/save"); alert("Backup salvo."); }
     function downloadBackup() { window.location.href = "/backup.json"; }
     async function resetPanel() { if (confirm("Deseja apagar todas as OSs?")) { await fetch("/api/reset", { method: "POST" }); fetchOS(); }}
