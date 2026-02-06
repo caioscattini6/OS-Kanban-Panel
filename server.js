@@ -34,6 +34,12 @@ app.get('/api/os', (req, res) => {
   res.json(activeOS);
 });
 
+// Retorna todas as OS arquivadas
+app.get('/api/os/archived/all', (req, res) => {
+  const archivedOS = ordemServico.filter(os => os.archived);
+  res.json(archivedOS);
+});
+
 // Cria nova OS
 app.post('/api/os', (req, res) => {
   const { numero, status } = req.body;
@@ -43,18 +49,18 @@ app.post('/api/os', (req, res) => {
   if (ordemServico.find(o => o.numero === numero && !o.archived)) {
     return res.status(400).json({ error: 'OS já existente' });
   }
-  ordemServico.push({ numero, status, urgente: false, observacoes: "", archived: false, criadoEm: new Date().toISOString() });
+  ordemServico.push({ numero, status, urgente: false, observacoes: "", archived: false, archiveStatus: "arquivado", criadoEm: new Date().toISOString() });
   fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));
   res.status(201).json({ success: true });
 });
 
-// Atualiza status, urgente, observações ou archived
+// Atualiza status, urgente, observações, archived ou archiveStatus
 app.put('/api/os/:numero', (req, res) => {
   const numero = req.params.numero;
   const index = ordemServico.findIndex(o => o.numero === numero);
   if (index === -1) return res.status(404).json({ error: 'OS não encontrada' });
 
-  const { status, urgente, observacoes, archived } = req.body;
+  const { status, urgente, observacoes, archived, archiveStatus } = req.body;
 
   if (status && !STATUS_VALIDOS.includes(status)) {
     return res.status(400).json({ error: 'Status inválido' });
@@ -63,7 +69,13 @@ app.put('/api/os/:numero', (req, res) => {
   if (status) ordemServico[index].status = status;
   if (typeof urgente === 'boolean') ordemServico[index].urgente = urgente;
   if (typeof observacoes === 'string') ordemServico[index].observacoes = observacoes;
-  if (typeof archived === 'boolean') ordemServico[index].archived = archived;
+  if (typeof archived === 'boolean') {
+    ordemServico[index].archived = archived;
+    if (archived && !ordemServico[index].archiveStatus) {
+      ordemServico[index].archiveStatus = "arquivado";
+    }
+  }
+  if (archiveStatus) ordemServico[index].archiveStatus = archiveStatus;
 
   // ✅ Agora salva as alterações no arquivo
   fs.writeFileSync(DATA_FILE, JSON.stringify(ordemServico, null, 2));

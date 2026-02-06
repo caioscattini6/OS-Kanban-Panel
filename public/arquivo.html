@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arquivo - Painel de OS</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    header, .form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .form input, .form select, .form button {
+      padding: 6px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      background-color: #1e1e1e;
+      color: white;
+    }
+    .form button { background-color: #00c853; cursor: pointer; }
+    .columns {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 10px;
+      height: calc(100vh - 170px);
+    }
+    .column {
+      flex: 1 1 0;
+      background: #1e1e1e;
+      border-radius: 6px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .column h2 {
+      text-align: center;
+      font-size: 14px;
+      margin: 0 0 8px;
+      user-select: none;
+    }
+    .section-container {
+      flex-grow: 1;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: #2b2b2b;
+      padding: 4px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      align-content: start;
+    }
+    .os {
+      font-size: 11px;
+      padding: 4px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: bold;
+      border-radius: 4px;
+      position: relative;
+      cursor: grab;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    /* Tooltip de observações */
+    .os[data-obs]:hover::after {
+      content: attr(data-obs);
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      max-width: 240px;
+      white-space: pre-wrap;
+      z-index: 9999;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    /* Esconde tooltip durante drag */
+    .os.dragging::after { display: none !important; }
+
+    /* Cores por status de arquivo */
+    .arquivado { background: #666; color: white; }
+    .followup { background: #dc3545; color: white; }
+    .sucesso { background: #28a745; color: white; }
+
+    .urgente { animation: piscar 1s infinite; }
+    @keyframes piscar {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.5); }
+    }
+
+    .btn-urgente {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #bbb;
+      border: 1px solid #999;
+      cursor: pointer;
+    }
+    .urgente .btn-urgente { background-color: red; }
+
+    .btn-excluir {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 10px;
+      border: none;
+      background: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-obs {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      font-size: 12px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .search-highlight {
+      outline: 3px solid yellow;
+      animation: brilho 1s infinite alternate;
+    }
+    @keyframes brilho {
+      from { outline-color: yellow; }
+      to { outline-color: orange; }
+    }
+    #archiveDeleteDialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    #archiveDeleteDialog > div {
+      background: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      color: #e0e0e0;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    }
+    #archiveDeleteDialog h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+    #archiveDeleteDialog button {
+      margin: 0 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #archiveDeleteDialog .btn-restore {
+      background-color: #FFA500;
+      color: black;
+    }
+    #archiveDeleteDialog .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+    #archiveDeleteDialog .btn-cancel {
+      background-color: #666;
+      color: white;
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+    }
+    .popup-content {
+      background: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 8px;
+      padding: 24px;
+      color: #e0e0e0;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+      min-width: 400px;
+    }
+    .popup-content h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+    .popup-content textarea {
+      width: 100%;
+      padding: 8px;
+      background: #2b2b2b;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-family: Arial, sans-serif;
+      resize: vertical;
+    }
+    .popup-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .popup-actions button {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #00c853;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 style="font-size:16px;">Painel de Follow-UP de Clientes PINNACLE</h1>
+    <div>
+      <button onclick="saveNow()">Salvar</button>
+      <button onclick="window.location.href='INDEX.HTML'" style="background-color: #00c853;">Voltar</button>
+    </div>
+  </header>
+
+  <div class="columns">
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'arquivado')">
+      <h2>Arquivados</h2>
+      <div id="arquivadoCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'followup')">
+      <h2>Follow-Up</h2>
+      <div id="followupCol" class="section-container"></div>
+    </div>
+
+    <div class="column" ondragover="allowDrop(event)" ondrop="drop(event, 'sucesso')">
+      <h2>Sucesso</h2>
+      <div id="sucessoCol" class="section-container"></div>
+    </div>
+  </div>
+
+  <div id="obsPopup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h3>Observações da OS <span id="obsNumero"></span></h3>
+      <textarea id="obsTexto" rows="6" placeholder="Digite as observações aqui..."></textarea>
+      <div class="popup-actions">
+        <button onclick="salvarObservacoes()">Salvar</button>
+        <button onclick="fecharPopup()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="archiveDeleteDialog" style="display:none;">
+    <div>
+      <h3>O que fazer com a OS <span id="deleteOSNumero"></span>?</h3>
+      <button class="btn-restore" onclick="restoreOS()">↩️ Restaurar</button>
+      <button class="btn-delete" onclick="permanentlyDeleteOS()">🗑️ Deletar</button>
+      <button class="btn-cancel" onclick="cancelDelete()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    let osAtual = null;
+    let osToDelete = null;
+
+    function allowDrop(e) { e.preventDefault(); }
+
+    async function drop(e, newStatus) {
+      e.preventDefault();
+      const numero = e.dataTransfer.getData("text/plain");
+      if (!numero) return;
+      await fetch(`/api/os/${numero}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ archiveStatus: newStatus }),
+      });
+      fetchArchivedOS();
+    }
+
+    async function fetchArchivedOS() {
+      const res = await fetch("/api/os/archived/all");
+      const data = await res.json();
+      const cols = {
+        arquivado: document.getElementById("arquivadoCol"),
+        followup: document.getElementById("followupCol"),
+        sucesso: document.getElementById("sucessoCol"),
+      };
+      Object.values(cols).forEach(col => col.innerHTML = "");
+      data.sort((a, b) => Number(a.numero) - Number(b.numero));
+      data.forEach(({ numero, archiveStatus, urgente, observacoes }) => {
+        const div = document.createElement("div");
+        div.className = `os ${archiveStatus}`;
+        if (urgente) div.classList.add("urgente");
+        div.setAttribute("draggable", "true");
+        if (observacoes) div.setAttribute("data-obs", observacoes.replace(/"/g, "'"));
+        div.addEventListener("dragstart", e => { div.classList.add("dragging"); e.dataTransfer.setData("text/plain", numero); });
+        div.addEventListener("dragend", () => { div.classList.remove("dragging"); });
+        div.innerHTML = `
+          <div class="btn-urgente" onclick="toggleUrgente('${numero}')"></div>
+          <button class="btn-excluir" onclick="deleteOS('${numero}')">&times;</button>
+          <button class="btn-obs" onclick="abrirPopup('${numero}')">✎</button>
+          ${numero}
+        `;
+        if (cols[archiveStatus]) cols[archiveStatus].appendChild(div);
+      });
+    }
+
+    async function toggleUrgente(numero) { 
+      await fetch(`/api/os/urgente/${numero}`, { method: "PUT" }); 
+      fetchArchivedOS(); 
+    }
+
+    function deleteOS(numero) { 
+      osToDelete = numero; 
+      document.getElementById("deleteOSNumero").textContent = numero; 
+      document.getElementById("archiveDeleteDialog").style.display = "flex"; 
+    }
+
+    async function restoreOS() { 
+      if (!osToDelete) return; 
+      await fetch(`/api/os/${osToDelete}`, { 
+        method: "PUT", 
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify({ archived: false }) 
+      }); 
+      cancelDelete(); 
+      fetchArchivedOS(); 
+    }
+
+    async function permanentlyDeleteOS() { 
+      if (!osToDelete) return; 
+      await fetch(`/api/os/${osToDelete}`, { method: "DELETE" }); 
+      cancelDelete(); 
+      fetchArchivedOS(); 
+    }
+
+    function cancelDelete() { 
+      osToDelete = null; 
+      document.getElementById("archiveDeleteDialog").style.display = "none"; 
+    }
+
+    async function abrirPopup(numero) { 
+      osAtual = numero; 
+      document.getElementById("obsNumero").textContent = numero; 
+      const res = await fetch(`/api/os/${numero}`); 
+      const dados = await res.json(); 
+      document.getElementById("obsTexto").value = dados.observacoes || ""; 
+      document.getElementById("obsPopup").style.display = "flex"; 
+    }
+
+    function fecharPopup() { 
+      document.getElementById("obsPopup").style.display = "none"; 
+      osAtual = null; 
+    }
+
+    async function salvarObservacoes() { 
+      const texto = document.getElementById("obsTexto").value; 
+      if (!osAtual) return; 
+      await fetch(`/api/os/${osAtual}`, { 
+        method: "PUT", 
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify({ observacoes: texto }) 
+      }); 
+      fecharPopup(); 
+    }
+
+    async function saveNow() { 
+      await fetch("/api/save"); 
+      alert("Backup salvo."); 
+    }
+
+    // Load archived OS on page load and refresh every 5 seconds
+    fetchArchivedOS(); 
+    setInterval(fetchArchivedOS, 5000);
+  </script>
+</body>
+</html>
